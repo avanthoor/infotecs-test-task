@@ -1,0 +1,24 @@
+{
+  "name": "infotecs-test-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html -d docs --public-url ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avanthoor/infotecs-test-task.git"
+  },
+  "author": "Vladimir Zhukov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avanthoor/infotecs-test-task/issues"
+  },
+  "homepage": "https://github.com/avanthoor/infotecs-test-task#readme",
+  "devDependencies": {
+    "sass": "^1.45.1"
+  }
+}
