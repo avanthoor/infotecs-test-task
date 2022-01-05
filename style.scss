@@ -11,23 +11,22 @@ body {
 
 table {
   width: 50%;
-  border: 1px solid teal;
+  border: 2px solid teal;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 tr {
-  border: 1px solid teal;
+  border: 2px solid teal;
   cursor: pointer;
-
-  &:focus {
-    color: orange;
-  }
 }
 
 td {
-  border-right: 1px solid teal;
+  border-right: 2px solid teal;
 
+  // Реализуем образание многоточием теста свыше двух строк
   &:nth-child(3) {
+    word-wrap: break-word;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -36,7 +35,7 @@ td {
 }
 
 th {
-  border: 1px solid teal;
+  border: 2px solid teal;
 }
 
 img {
