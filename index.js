@@ -4,6 +4,8 @@ import date from './date.json' // читаем date.json локально при
 import sortByAlpha from './src/static/sort-by-alpha.svg'
 import visibilityOn from './src/static/visibility-on.svg'
 import visibilityOff from './src/static/visibility-off.svg'
+import showText from './src/static/showText.svg'
+import showColor from './src/static/showColor.svg'
 
 const rowsOnPage = 10 // количество строк таблицы, выводимых на странице (по заданию)
 
@@ -13,10 +15,16 @@ const container = document.createElement('div')
 document.body.append(container)
 container.id = 'container'
 
+// Создаём контейнер для таблицы и кнопок пагинации
+const tablePaginationContainer = document.createElement('div')
+
+container.append(tablePaginationContainer)
+tablePaginationContainer.id = 'tablePaginationContainer'
+
 // Создаём таблицу 
 const table = document.createElement('table')
  
-container.prepend(table)
+tablePaginationContainer.prepend(table)
 
 for (let i = 0; i < rowsOnPage; i++) {       // заполняем таблицу строками (кол-во строк === rowsOnPage)
   const tr = document.createElement('tr')
@@ -58,6 +66,7 @@ for (let cell of columnAbout) {
 
 for (let cell of columnEyeColor) {
   cell.dataset.column = 3
+  cell.classList.add('hideColorName')
 }
 
 const numberOfBtns = date.length / rowsOnPage // определяем количество кнопок пагинации (в их роли выступят элементы li)
@@ -65,7 +74,7 @@ const numberOfBtns = date.length / rowsOnPage // определяем колич
 // Создаём и добавляем на страницу кнопки для пагинации
 const paginationList = document.createElement('ul')
 
-document.body.append(paginationList)
+tablePaginationContainer.append(paginationList)
 paginationList.id = 'paginationList'
 
 for (let i = 1; i <= numberOfBtns; i++) {
@@ -98,10 +107,10 @@ for (let cell of headerCells) {
   cell.classList.add('headerCell')
 }
 
-headerCells[0].textContent = 'First Name'
-headerCells[1].textContent = 'Last name'
-headerCells[2].textContent = 'About'
-headerCells[3].textContent = 'Eye color'
+headerCells[0].innerHTML = '<h2>First name</h2>'
+headerCells[1].innerHTML = '<h2>Last name</h2>'
+headerCells[2].innerHTML = '<h2>About</h2>'
+headerCells[3].innerHTML = '<h2>Eye color</h2>'
 
 headerCells.forEach((cell, i) => { // для заголовочных ячеек также устанавливаем дата-атрибут своей колонки
   cell.dataset.column = i
@@ -114,7 +123,7 @@ const paintTheCells = () => {
   }
 }
 
-paintTheCells() // вызываем эту функцию, чтобы ячейки были окрашены по умолчанию
+paintTheCells() // вызываем эту функцию, чтобы ячейки в столбце "Eye color" были окрашены по умолчанию в соответствии со своими значениями
 
 let dateCashed = [...date] // кэшурием JSON для того, чтобы локально сохранять изменения при редактировании данных
 
@@ -151,7 +160,7 @@ paginationList.addEventListener('click', e => {
 // Создадим div с формой редактирования данных
 const formContainer = document.createElement('div')
 formContainer.id = 'formContainer'
-table.after(formContainer)
+container.append(formContainer)
 
 const form = document.createElement('form')
 formContainer.append(form)
@@ -171,8 +180,9 @@ const inputAbout = inputs[2]
 const inputEyeColor = inputs[3]
 
 const formBtn = document.createElement('button')
-formContainer.append(formBtn)
 
+formBtn.id = 'formBtn'
+formContainer.append(formBtn)
 formBtn.textContent = 'Edit'
 
 // Озаглавим input'ы
@@ -187,41 +197,33 @@ formContainer.style.visibility = 'hidden' // форма редактирован
 let trIndex // объявляем переменную, в которой будет содержаться индекс строки, по которой кликнули
 
 table.addEventListener('click', e => {
-  let tr = e.target.closest('tr') // при клике на строки e.target === td, поэтому используем метод closest
-  let trId = tr.dataset.id        // получаем id строки, по которой кликнули
+  let tr = e.target.closest('tr')               // при клике на строки e.target === td, поэтому используем метод closest
+  
+  let trId = tr ? tr.dataset.id : null          // получаем id строки, по которой кликнули
 
-  trIndex = ((+currentPage - 1) * 10) + +trId // по формуле определяем индекс строки по которой кликнули
+  trIndex = ((+currentPage - 1) * 10) + +trId   // по формуле определяем индекс строки по которой кликнули
 
   for (let row of rows) {
-    row.removeAttribute('data-clicked') // после кажого клика удаляем все атрибуты у строк
-    row.style.background = '#fff' // и убираем заливку строки, на которую кликнули
+    row.removeAttribute('data-clicked')         // после кажого клика удаляем все атрибуты у строк
+    row.classList.remove('clicked')             // убираем выделяющую рамку со строки, на которую ранее кликнули
   }
 
-  if (tr && tr.id !== 'headerRow') { // игнорируем заголовочную строку
-    tr.dataset.clicked = 'clicked' // если клик произошёл про строке - устанавливаем дата-атрибут 'clicked' кликнутой строке
-    formContainer.style.visibility = 'visible' // делаем видимым блок редактирования
+  if (tr && tr.id !== 'headerRow') {            // игнорируем заголовочную строку
+    tr.dataset.clicked = 'clicked'              // если клик произошёл про строке - устанавливаем дата-атрибут 'clicked' кликнутой строке
+    formContainer.style.visibility = 'visible'  // делаем видимым блок редактирования
 
     if (tr.hasAttribute('data-clicked')) {
-      tr.style.background = 'orange' // окрашиваем "кликнутую" строку
+      tr.classList.add('clicked')               // выделяем оранжевой рамкой выбранную строку
     }
   } 
 })
 
 // "Вешаем" слушатель события клика на кнопку "Edit"
 formBtn.addEventListener('click', () => {
-  for (let row of rows) {
-    row.style.background = '#fff' // убираем заливку со строки
 
-    /* if (row.dataset.clicked) {                          // ищем строку, на котороую кликнули
-      for (let i = 0; i < headerCells.length; i++) {
-        if (inputs[i].value !== '') {                   // если input не пустой, тогда добавляем в ячейку новое значение иначе сохраняется старое
-          row.children[i].textContent = inputs[i].value // записывем значение из input'ов в содержимое ячеек соответствующей строки для мнговенного отображения изменений
-        }
-      }
-    } */
+  for (let row of rows) {           // убираем выделяющу рамку со строки 
+    row.classList.remove('clicked')
   }
-
- 
 
   // Записываем изменения в закэшированный объект JSON 
   if (inputName.value !== '') {
@@ -253,7 +255,7 @@ formBtn.addEventListener('click', () => {
 //--------------------------------------------------------------------------------------------------------------------------
 // РЕАЛИЗУЕМ ФУНКЦИЮ СОРИТРОВКИ ДАННЫХ И СКРЫТИЯ/ПОКАЗА КОЛОНОК
 
-for (let cell of headerCells) {     // добавляем в заголовочные ячейки иконки сорировки и скрытия колонок
+for (let cell of headerCells) {     // добавляем в заголовочные ячейки иконки сортировки,скрытия колонок и отображения названия цвета в колонке "Eye color"
   const imgSort = new Image(20, 20)
   const imgHide = new Image (20, 20)
 
@@ -267,8 +269,16 @@ for (let cell of headerCells) {     // добавляем в заголовоч�
   imgHide.classList.add('imgHide')
 }
 
+let imgEyeColor = new Image(20, 20)
+
+imgEyeColor.src = showText
+imgEyeColor.id = 'imgEyeColor'
+headerCells[3].append(imgEyeColor)
+
 const imgsSort = document.querySelectorAll('.imgSort')
 const imgsHide = document.querySelectorAll('.imgHide')
+imgEyeColor = document.querySelector('#imgEyeColor')
+
 
 // Функция сортировки
 const sortAZ = (column) => { // сортировка от a до z
@@ -294,7 +304,8 @@ for (let cell of headerCells) {
   headerCellsInners.push(cell.innerHTML)
 }
 
-let clickCounter = 0     // объявляем счётчик кликов для реализации функции сортировки
+let clickCounterSort = 0     // объявляем счётчик кликов для реализации функции сортировки
+let clickCounterEyeColor = 0
 
 // "Вешаем" счётчик кликов на строку с заголовочными ячейками
 headerRow.addEventListener('click', e => { 
@@ -305,8 +316,8 @@ headerRow.addEventListener('click', e => {
 
   // Реализуем возможность соритровки
   if (e.target.classList.contains('imgSort')) {     // при каждом чётном клике по иконке сортировки отрабатывает функция sortZA
-    clickCounter++                                  // при нечётном - sortAZ
-    clickCounter % 2 === 0 ? sortZA(i) : sortAZ(i)  
+    clickCounterSort++                              // при нечётном - sortAZ
+    clickCounterSort % 2 === 0 ? sortZA(i) : sortAZ(i)  
   }
 
   // При клике на иконку "отобразить" и "скрыть" добавляется и убирается дата-атрибут hidden соответственно
@@ -337,6 +348,13 @@ headerRow.addEventListener('click', e => {
       for (let row of rowsArr[i]) {                       // ...и весь остальной столбец
         row.classList.add('hidden')
       }
+
+       // Фикс странного поведения CSS: при скрытии колонки "Описание" пропадала правая рамка
+      if (+i === 2) {                      
+        for (let cell of columnEyeColor) {
+        cell.classList.add('fixBorder1')
+      }
+  }
     }
   }
   
@@ -349,12 +367,22 @@ headerRow.addEventListener('click', e => {
     }
 
     headerCells[i].innerHTML = headerCellsInners[i] // возвращаем соответствующее содержимое заголовочной колонки
+    
+    if (+i === 2) {                                 // продолжение фикса
+      for (let cell of columnEyeColor) {
+        cell.classList.remove('fixBorder1')
+      }
+    }
   }
-  
-  // Фикс странного поведения CSS: при скрытии колонки "Описание" пропадала правая рамка
-  if (+i === 2) {                      
+
+  if (e.target.id === 'imgEyeColor') {              // реализуем возможность по клику отображать/скрывать название цвета в колонке "Eye color"
+    clickCounterEyeColor++
+
+    clickCounterEyeColor % 2 === 0 ? imgEyeColor.src = showText : imgEyeColor.src = showColor // при каждом клике заменяем иконку на соответствующую
+
     for (let cell of columnEyeColor) {
-      cell.classList.remove('fixBorder1')
+      cell.classList.toggle('hideColorName')
+      cell.classList.toggle('showColorName')
     }
   }
 })

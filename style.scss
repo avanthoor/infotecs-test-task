@@ -2,29 +2,44 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: sans-serif;
 }
 
 #container {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+}
+
+#tablePaginationContainer {
+  width: 50%;
 }
 
 table {
-  width: 50%;
-  border: 2px solid teal;
+  width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
 
 tr {
-  border: 2px solid teal;
+  border: 2px solid black;
   cursor: pointer;
+
+  &:first-child {
+    cursor: default;
+  }
+
+  &.clicked {
+    border: 4px solid orange;
+  }
 }
 
 td {
-  border-right: 2px solid teal;
+  border-right: 2px solid black;
+  font-size: 14px;
+  padding: 2px;
 
-  // Реализуем образание многоточием теста свыше двух строк
+  // Реализуем обрезание многоточием теста свыше двух строк в колонке "About"
   &:nth-child(3) {
     word-wrap: break-word;
     display: -webkit-box;
@@ -32,22 +47,30 @@ td {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+}
 
-  &:nth-child(4) {
-    color: transparent;
-  }
+.hideColorName {
+  color: transparent;
+}
+
+.showColorName {
+  color: black;
+  text-shadow: 1px 0px 1px white;
 }
 
 th {
-  border: 2px solid teal;
+  border: 2px solid black;
+  padding: 2px;
+}
+
+h2 {
+  font-size: 18px;
+  float: left;
 }
 
 img {
-  display: inline;
-  float: left;
-  &:hover {
-    cursor: pointer;
-  }
+  float: right;
+  cursor: pointer;
 }
 
 #formContainer {
@@ -58,40 +81,35 @@ img {
   padding: 5px;
 }
 
-button {
-  border: 1px solid teal;
-  background: transparent;
-  margin: 10px;
-  cursor: pointer;
+h3 {
+  font-size: 18px;
+}
+
+input {
+  width: 100%;
 }
 
 #paginationList {
   display: flex;
   list-style-type: none;
+  justify-content: center;
 
   & > li {
-    color: teal;
-    border: 2px solid teal;
+    border: 2px solid black;
     padding: 10px;
     margin: 10px 10px 0 0;
     cursor: pointer;
   }
 }
 
-#columnIsHidden {
-  width: 50px;
-  height: 50px;
-  border: 2px solid teal;
-}
-
 .hidden {
   width: 20px;
   visibility: hidden;
-  border: 2px solid teal;
+  border: 2px solid black;
   /*   border-top: hidden;
   border-bottom: hidden; */
 }
 
 .fixBorder1 {
-  border-left: 2px solid teal;
+  border-left: 2px solid black;
 }
