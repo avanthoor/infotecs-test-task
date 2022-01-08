@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-body {
+#container {
   display: flex;
   justify-content: space-around;
 }
@@ -31,6 +31,10 @@ td {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  &:nth-child(4) {
+    color: transparent;
   }
 }
 
@@ -59,4 +63,35 @@ button {
   background: transparent;
   margin: 10px;
   cursor: pointer;
+}
+
+#paginationList {
+  display: flex;
+  list-style-type: none;
+
+  & > li {
+    color: teal;
+    border: 2px solid teal;
+    padding: 10px;
+    margin: 10px 10px 0 0;
+    cursor: pointer;
+  }
+}
+
+#columnIsHidden {
+  width: 50px;
+  height: 50px;
+  border: 2px solid teal;
+}
+
+.hidden {
+  width: 20px;
+  visibility: hidden;
+  border: 2px solid teal;
+  /*   border-top: hidden;
+  border-bottom: hidden; */
+}
+
+.fixBorder1 {
+  border-left: 2px solid teal;
 }
