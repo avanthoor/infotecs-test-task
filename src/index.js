@@ -1,11 +1,11 @@
-import date from './date.json' // читаем date.json локально при помощи возможностей сборщика Parcel
+import date from '../date.json' // читаем date.json локально при помощи возможностей сборщика Parcel
 
 // Импортируем изображения
-import sortByAlpha from './src/static/sort-by-alpha.svg'
-import visibilityOn from './src/static/visibility-on.svg'
-import visibilityOff from './src/static/visibility-off.svg'
-import showText from './src/static/showText.svg'
-import showColor from './src/static/showColor.svg'
+import sortByAlpha from './static/sort-by-alpha.svg'
+import visibilityOn from './static/visibility-on.svg'
+import visibilityOff from './static/visibility-off.svg'
+import showText from './static/showText.svg'
+import showColor from './static/showColor.svg'
 
 const rowsOnPage = 10 // количество строк таблицы, выводимых на странице (по заданию)
 
@@ -123,17 +123,17 @@ const paintTheCells = () => {
   }
 }
 
-paintTheCells() // вызываем эту функцию, чтобы ячейки в столбце "Eye color" были окрашены по умолчанию в соответствии со своими значениями
+paintTheCells()            // вызываем эту функцию, чтобы ячейки в столбце "Eye color" были окрашены по умолчанию в соответствии со своими значениями
 
 let dateCashed = [...date] // кэшурием JSON для того, чтобы локально сохранять изменения при редактировании данных
 
-let currentPage = 1 // объявляем переменную, запоминающую текущую страницу со значением по умолчанию - 1
+let currentPage = 1        // объявляем переменную, запоминающую текущую страницу со значением по умолчанию - 1
 
 // Функция заполнения таблицы актуальными данными из кэшированного JSON'a 
 const fillInTheTable = () => {
-  let start = (currentPage - 1) * rowsOnPage // По формуле определяем с элемента массива данных начать выводить данные в таблицу для каждой страницы
-  let end = start + rowsOnPage             // Определяем на каком элементе массива данных прекратить вывод данных в таблицу для каждой страницы
-  let dateCashedSliced = dateCashed.slice(start, end)  // "Режем" массив данных в зависимости от того, на клавишу с каким номером страницы произошёл клик
+  let start = (currentPage - 1) * rowsOnPage           // по формуле определяем с элемента массива данных начать выводить данные в таблицу для каждой страницы
+  let end = start + rowsOnPage                         // определяем на каком элементе массива данных прекратить вывод данных в таблицу для каждой страницы
+  let dateCashedSliced = dateCashed.slice(start, end)  // "режем" массив данных в зависимости от того, на клавишу с каким номером страницы произошёл клик
   
   // Заполняем таблицу данными dateSliced (соответствующими нажатой кнопке)
   for (let i = 0; i < rowsOnPage; i++) {
@@ -144,9 +144,9 @@ const fillInTheTable = () => {
   }
 }
 
-// Вешаем на каждую кнопку пагинации слушатель клика
+// "Вешаем" на каждую кнопку пагинации слушатель клика
 paginationList.addEventListener('click', e => {
-  currentPage = +e.target.textContent        // Определяем номер страницы, которую хочет получить пользователь, кликнув на соответствующую кнопку 
+  currentPage = +e.target.textContent        // определяем номер страницы, которую хочет получить пользователь, кликнув на соответствующую кнопку 
   
   fillInTheTable()
 
@@ -192,9 +192,9 @@ inputHeaders[1].textContent = 'Last name'
 inputHeaders[2].textContent = 'About'
 inputHeaders[3].textContent = 'Eye color'
 
-formContainer.style.visibility = 'hidden' // форма редактирования по умолчанию скрыта
+formContainer.style.visibility = 'hidden'       // форма редактирования по умолчанию скрыта
 
-let trIndex // объявляем переменную, в которой будет содержаться индекс строки, по которой кликнули
+let trIndex                                     // объявляем переменную, в которой будет содержаться индекс строки, по которой кликнули
 
 table.addEventListener('click', e => {
   let tr = e.target.closest('tr')               // при клике на строки e.target === td, поэтому используем метод closest
@@ -239,14 +239,13 @@ formBtn.addEventListener('click', () => {
     dateCashed[trIndex].eyeColor = inputEyeColor.value
   }
 
-  fillInTheTable()             // заново парсим dateCashed и заполняем таблицу отредактированными данными
+  fillInTheTable()                          // заново парсим dateCashed и заполняем таблицу отредактированными данными
   
-  for (let input of inputs) {  // очищаем input'ы после каждого редактирования
+  for (let input of inputs) {               // очищаем input'ы после каждого редактирования
     input.value = ''
   }
 
   formContainer.style.visibility = 'hidden' // скрываем блок редактирования после нажатия на клавишу "Редактировать"
-  
 
   paintTheCells()                           // вызываем функцию окраски ячеек столбца "Цвет глаз"
 })
@@ -255,7 +254,8 @@ formBtn.addEventListener('click', () => {
 //--------------------------------------------------------------------------------------------------------------------------
 // РЕАЛИЗУЕМ ФУНКЦИЮ СОРИТРОВКИ ДАННЫХ И СКРЫТИЯ/ПОКАЗА КОЛОНОК
 
-for (let cell of headerCells) {     // добавляем в заголовочные ячейки иконки сортировки,скрытия колонок и отображения названия цвета в колонке "Eye color"
+// Добавляем в заголовочные ячейки иконки сортировки,скрытия колонок и отображения названия цвета в колонке "Eye color"
+for (let cell of headerCells) {     
   const imgSort = new Image(20, 20)
   const imgHide = new Image (20, 20)
 
@@ -281,21 +281,21 @@ imgEyeColor = document.querySelector('#imgEyeColor')
 
 
 // Функция сортировки
-const sortAZ = (column) => { // сортировка от a до z
-  let sorted = Array.from(rows) // преобразовываем псевдомассив в массив, чтобы иметь возможность использовать метод массива sort()
-    .sort((a, b) => a.cells[column].textContent > b.cells[column].textContent ? 1 : -1) // Сортируем массив текстовому содержимому ячеек указанной колонки
+const sortAZ = (column) => {                                                            // сортировка от a до z
+  let sorted = Array.from(rows)                                                         // преобразовываем псевдомассив в массив, чтобы иметь возможность использовать метод массива sort()
+    .sort((a, b) => a.cells[column].textContent > b.cells[column].textContent ? 1 : -1) // сортируем массив текстовому содержимому ячеек указанной колонки
 
-  table.append(...sorted) // заполняем таблицу отсортированными данными
+  table.append(...sorted)                                                               // заполняем таблицу отсортированными данными
 }
 
-const sortZA = (column) => { //сортировка от z до a
+const sortZA = (column) => {                                                            // сортировка от z до a
   let sorted = Array.from(rows)
     .sort((a, b) => a.cells[column].textContent > b.cells[column].textContent ? -1 : 1)
 
   table.append(...sorted)
 }
 
-const rowsArr = [columnName, columnLastName, columnAbout, columnEyeColor] // для удобства добавим в массив все столбцы, в соответствии с их индексами
+const rowsArr = [columnName, columnLastName, columnAbout, columnEyeColor]              // для удобства добавим в массив все столбцы, в соответствии с их индексами
 
 // Cоздаём пустой массив и заполняем его содержимым заголовочных ячеек
 let headerCellsInners = []  
@@ -304,19 +304,19 @@ for (let cell of headerCells) {
   headerCellsInners.push(cell.innerHTML)
 }
 
-let clickCounterSort = 0     // объявляем счётчик кликов для реализации функции сортировки
+let clickCounterSort = 0                                      // объявляем счётчик кликов для реализации функции сортировки
 let clickCounterEyeColor = 0
 
 // "Вешаем" счётчик кликов на строку с заголовочными ячейками
 headerRow.addEventListener('click', e => { 
-  let i = e.target.closest('th').dataset.column               // Записываем в переменную i индекс столбца, в котором находится заголовочная ячейка
+  let i = e.target.closest('th').dataset.column               // записываем в переменную i индекс столбца, в котором находится заголовочная ячейка
   
   let clickOnImgHide = e.target.classList.contains('imgHide')
   let clickOnImgShow = e.target.classList.contains('imgShow')
 
   // Реализуем возможность соритровки
-  if (e.target.classList.contains('imgSort')) {     // при каждом чётном клике по иконке сортировки отрабатывает функция sortZA
-    clickCounterSort++                              // при нечётном - sortAZ
+  if (e.target.classList.contains('imgSort')) {               // при каждом чётном клике по иконке сортировки отрабатывает функция sortZA
+    clickCounterSort++                                        // при нечётном - sortAZ
     clickCounterSort % 2 === 0 ? sortZA(i) : sortAZ(i)  
   }
 
@@ -353,14 +353,14 @@ headerRow.addEventListener('click', e => {
       if (+i === 2) {                      
         for (let cell of columnEyeColor) {
         cell.classList.add('fixBorder1')
+        }
       }
-  }
     }
   }
   
   // Реализуем возмножность отображения колонок после скрытия
   if (e.target.classList.contains('imgShow')) {
-    headerCells[i].classList.remove('hidden') // удаляем класс hidden у всей колонки
+    headerCells[i].classList.remove('hidden')       // удаляем класс hidden у всей колонки
 
     for (let row of rowsArr[i]) {      
       row.classList.remove('hidden')
